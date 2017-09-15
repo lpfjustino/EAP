@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import random
-
+import matplotlib.pyplot as plt
 
 def get_adj_mat(n_cities):
     adj_mat = np.random.rand(n_cities, n_cities)
@@ -44,7 +44,17 @@ def pop_fitness(population, adj_mat):
     return fit
 
 
-def crossover(population, best_individual_i):
+def mutation(individual):
+    print(individual)
+    # Swapping
+    positions = np.random.randint(0, len(individual), 2)
+    print(positions)
+    aux = individual[positions[0]]
+    individual[positions[0]] = individual[positions[1]]
+    individual[positions[1]] = aux
+
+
+def crossover(population, best_individual_i, prob_mut=5e-2):
     n_individuals, n_cities = population.shape
     n_crs = population.shape[1]
     parent_1_inheritance_size = random.randint(1, math.ceil(n_crs / 2))
@@ -73,10 +83,15 @@ def crossover(population, best_individual_i):
             insert_pos = (parent_2_starting_point + j) % n_cities
             new_individual[insert_pos] = individual_contribution[j]
 
+        prob = np.random.rand()
+        # Event happened
+        if prob > prob_mut:
+            mutation(new_individual)
+
         population[i] = new_individual
 
 
-def run(n_cities=50, n_generations=10e2):
+def run(n_cities=100, n_generations=10e2):
     adj_mat = get_adj_mat(n_cities)
     population = get_population(10, n_cities)
 
@@ -92,5 +107,9 @@ def run(n_cities=50, n_generations=10e2):
         i += 1
 
         print(i, results)
+
+    x = np.range(n_generations)
+    y = results
+    plt.plot(x, y)
 
 run()
