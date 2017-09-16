@@ -91,7 +91,7 @@ def crossover(population, best_individual_i, prob_mut=5e-2):
         population[i] = new_individual
 
 
-def run(n_cities=100, n_generations=10e2):
+def run(n_cities=100, n_generations=10e3):
     adj_mat = get_adj_mat(n_cities)
     population = get_population(10, n_cities)
 
@@ -108,8 +108,9 @@ def run(n_cities=100, n_generations=10e2):
 
         print(i, results)
 
-    x = np.range(n_generations)
+    x = range(int(n_generations))
     y = results
     plt.plot(x, y)
+    plt.show()
 
 run()
